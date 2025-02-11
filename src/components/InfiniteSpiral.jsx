@@ -75,7 +75,7 @@ class Pendulum {
         this.cycle = (this.cycle + 1) % 360;
     }
 
-    render(context, length, radius, gravityStrength, verticalPosition, hasTrailEffect, hasDirectionalGravity, isVacuum) {
+    render(context, length, radius, gravityStrength, verticalPosition, hasTrailEffect, hasDirectionalGravity, isVacuum, horizontalPosition, hidePendulumArms) {
         // Update trail positions with directional gravity
         this.trails.forEach((point, index) => {
             if (!isVacuum) {  // Only update positions if not in vacuum
@@ -213,7 +213,9 @@ function InfiniteSpiral() {
         { t1: Math.PI/3, t2: Math.PI/3 },     // Blue pendulum
         { t1: Math.PI/3 + 0.01, t2: Math.PI/3 }  // Red pendulum
     ]);
-    const [hidePendulums, setHidePendulums] = useState(false);
+    const [hidePendulumArms, setHidePendulumArms] = useState(false);
+    const [horizontalPosition, setHorizontalPosition] = useState(0.5);
+    const [isTopLeft, setIsTopLeft] = useState(false);
     
     const pendulumsRef = useRef([
         new Pendulum(Math.PI/3, Math.PI/3, "#0000ff"),
@@ -234,17 +236,29 @@ function InfiniteSpiral() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Add keyboard listener for 'h' key
+    // Add keyboard listener for both 'h' and 'j' keys
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key.toLowerCase() === 'h') {
-                setHidePendulums(prev => !prev);
+                setHidePendulumArms(prev => !prev);
+            }
+            if (event.key.toLowerCase() === 'j') {
+                setIsTopLeft(prev => !prev);
+                // When toggling to top-left, set positions to 0
+                if (!isTopLeft) {
+                    setVerticalPosition(0);
+                    setHorizontalPosition(0);
+                } else {
+                    // When toggling back, reset to center
+                    setVerticalPosition(0.5);
+                    setHorizontalPosition(0.5);
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyPress);
         return () => window.removeEventListener('keydown', handleKeyPress);
-    }, []);
+    }, [isTopLeft]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -264,12 +278,16 @@ function InfiniteSpiral() {
         let animationFrameId;
 
         const animate = () => {
-            context.fillStyle = 'black';
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            if (!hasTrailEffect) {
+                context.fillStyle = 'black';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+            }
             
             if (!isPaused) {
                 pendulumsRef.current.forEach(pendulum => {
-                    pendulum.update(dt, length, prefactor_t, prefactor_p, constant, verticalPosition);
+                    pendulum.update(dt, length, prefactor_t, prefactor_p, constant, 
+                        isTopLeft ? 0 : verticalPosition
+                    );
                 });
             }
 
@@ -277,12 +295,14 @@ function InfiniteSpiral() {
                 pendulum.render(
                     context, 
                     length, 
-                    hidePendulums ? 0 : radius, // Set radius to 0 to hide pendulums
-                    gravityStrength, 
-                    verticalPosition, 
-                    hasTrailEffect, 
-                    hasDirectionalGravity, 
-                    isVacuum
+                    hidePendulumArms ? 0 : radius,
+                    gravityStrength,
+                    isTopLeft ? 0 : verticalPosition,
+                    hasTrailEffect,
+                    hasDirectionalGravity,
+                    isVacuum,
+                    isTopLeft ? 0 : horizontalPosition,
+                    hidePendulumArms
                 );
             });
 
@@ -303,7 +323,9 @@ function InfiniteSpiral() {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [isPaused, verticalPosition, hasTrailEffect, hasDirectionalGravity, pendulumLength, isVacuum, gravityStrength, hidePendulums]);
+    }, [isPaused, verticalPosition, horizontalPosition, hasTrailEffect, 
+        hasDirectionalGravity, pendulumLength, isVacuum, gravityStrength, 
+        hidePendulumArms, isTopLeft]);
 
     // Control Handlers
     
@@ -392,6 +414,11 @@ function InfiniteSpiral() {
         });
     };
 
+    // Add handler for horizontal position
+    const handleHorizontalPositionChange = (value) => {
+        setHorizontalPosition(value);
+    };
+
     return (
         <>
             <canvas 
@@ -424,6 +451,8 @@ function InfiniteSpiral() {
                 gravityStrength={gravityStrength}
                 onClear={handleClear}
                 pendulumAngles={pendulumAngles}
+                horizontalPosition={horizontalPosition}
+                onHorizontalPositionChange={handleHorizontalPositionChange}
             />
         </>
     );
