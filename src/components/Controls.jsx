@@ -319,7 +319,11 @@ function Controls({
 
       {/* Gravity strength slider */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ color: 'white' }}>Gravity Strength</label>
+        <label style={{ 
+          color: isVacuum ? 'rgba(255, 255, 255, 0.5)' : 'white'  // Gray out text when in vacuum
+        }}>
+          Gravity Strength
+        </label>
         <input 
           type="range" 
           min="0.1" 
