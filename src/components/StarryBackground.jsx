@@ -4,7 +4,6 @@ function StarryBackground() {
     const canvasRef = useRef(null);
     const mouseRef = useRef({ x: -1000, y: -1000 });
     const explosionsRef = useRef([]); // Store explosions
-    const supernovaParticlesRef = useRef([]); // Store supernova particles
     const timeRef = useRef(0); // Track time for color cycling
 
     // Configuration could be moved to a separate file
@@ -56,25 +55,6 @@ function StarryBackground() {
             maxRadius: 100,
             speed: 5,
             duration: 1000 // ms
-        },
-        supernova: {
-            particleCount: 50,      // Number of particles in explosion
-            maxRadius: 300,         // How far particles travel
-            duration: 2000,         // How long the effect lasts (ms)
-            colors: [               // Colors for the explosion
-                'rgba(255, 255, 255, opacity)',  // White core
-                'rgba(255, 200, 100, opacity)',  // Yellow/orange
-                'rgba(255, 100, 50, opacity)',   // Orange/red
-                'rgba(255, 50, 50, opacity)'     // Red
-            ],
-            particleSize: {
-                min: 1,
-                max: 3
-            },
-            speedRange: {
-                min: 0.5,
-                max: 2
-            }
         }
     };
 
@@ -129,88 +109,6 @@ function StarryBackground() {
             };
         };
 
-        function createSupernovaParticles(x, y) {
-            const particles = [];
-            for (let i = 0; i < CONFIG.supernova.particleCount; i++) {
-                const angle = (Math.PI * 2 * i) / CONFIG.supernova.particleCount;
-                const speed = CONFIG.supernova.speedRange.min + 
-                    Math.random() * (CONFIG.supernova.speedRange.max - CONFIG.supernova.speedRange.min);
-                
-                particles.push({
-                    x,
-                    y,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed,
-                    radius: CONFIG.supernova.particleSize.min + 
-                        Math.random() * (CONFIG.supernova.particleSize.max - CONFIG.supernova.particleSize.min),
-                    color: CONFIG.supernova.colors[Math.floor(Math.random() * CONFIG.supernova.colors.length)],
-                    startTime: Date.now(),
-                    angle: angle // Store angle for rotation effects
-                });
-            }
-            return particles;
-        }
-
-        const handleClick = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Create initial flash
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add particles to the supernova
-            supernovaParticlesRef.current = [
-                ...supernovaParticlesRef.current,
-                ...createSupernovaParticles(x, y)
-            ];
-        };
-
-        function drawSupernova(ctx) {
-            supernovaParticlesRef.current = supernovaParticlesRef.current.filter(particle => {
-                const elapsed = Date.now() - particle.startTime;
-                if (elapsed > CONFIG.supernova.duration) return false;
-
-                const progress = elapsed / CONFIG.supernova.duration;
-                const opacity = 1 - progress;
-                const currentRadius = particle.radius * (1 + progress * 2);
-
-                // Update position with expanding effect
-                particle.x += particle.vx * (1 + progress);
-                particle.y += particle.vy * (1 + progress);
-
-                // Draw particle with trail
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, currentRadius, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color.replace('opacity', opacity);
-                ctx.fill();
-
-                // Add glow effect
-                const gradient = ctx.createRadialGradient(
-                    particle.x, particle.y, 0,
-                    particle.x, particle.y, currentRadius * 4
-                );
-                gradient.addColorStop(0, particle.color.replace('opacity', opacity * 0.5));
-                gradient.addColorStop(1, 'transparent');
-                ctx.fillStyle = gradient;
-                ctx.fill();
-
-                // Draw trailing line
-                ctx.beginPath();
-                ctx.moveTo(particle.x, particle.y);
-                ctx.lineTo(
-                    particle.x - particle.vx * 10 * (1 - progress),
-                    particle.y - particle.vy * 10 * (1 - progress)
-                );
-                ctx.strokeStyle = particle.color.replace('opacity', opacity * 0.3);
-                ctx.lineWidth = currentRadius * 0.5;
-                ctx.stroke();
-
-                return true;
-            });
-        }
-
         function updateStarColor(star) {
             if (CONFIG.interactivity.colorCycle) {
                 star.hue = (star.hue + CONFIG.interactivity.colorCycleSpeed) % 360;
@@ -223,12 +121,6 @@ function StarryBackground() {
             timeRef.current++;
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw supernova effects
-            drawSupernova(ctx);
-
-            // Draw explosions
-            drawExplosions(ctx);
 
             stars.forEach(star => {
                 star.x += star.vx;
@@ -305,7 +197,6 @@ function StarryBackground() {
 
         // Make sure we're adding the event listener to the canvas
         canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('click', handleClick);
 
         // Handle window resizing
         const handleResize = () => {
@@ -323,7 +214,6 @@ function StarryBackground() {
         return () => {
             window.removeEventListener('resize', handleResize);
             canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('click', handleClick);
         };
     }, []);
 
