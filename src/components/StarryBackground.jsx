@@ -26,10 +26,10 @@ function StarryBackground() {
             }
         },
         glow: {
-            baseSize: 7,
+            baseSize: 5,
             hoverSize: 24,
             maxSize: 40,
-            growthRate: 0.2,
+            growthRate: 0.8,
             shrinkRate: 0.1
         },
         mouse: {
