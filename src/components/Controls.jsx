@@ -163,7 +163,7 @@ function Controls({
             border: '1px solid #4dabf7',
             borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '14px',
+            fontSize: '16px',
             flex: 1,
             transition: 'all 0.3s ease',
             boxShadow: '0 0 10px rgba(77, 171, 247, 0.1)',  // Blue glow
@@ -184,7 +184,7 @@ function Controls({
             border: '1px solid #4dabf7',
             borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '14px',
+            fontSize: '16px',
             flex: 1,
             transition: 'all 0.3s ease',
             boxShadow: '0 0 10px rgba(77, 171, 247, 0.1)',  // Blue glow
@@ -200,12 +200,12 @@ function Controls({
         <button 
           style={{ 
             padding: '8px 16px',
-            backgroundColor: '#ff6b6b',  // Kept orange for Clear
+            backgroundColor: 'orange',  // Kept orange for Clear
             color: 'white',
             border: '1px solid #ff6b6b',
             borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '14px',
+            fontSize: '16px',
             flex: 1,
             transition: 'all 0.3s ease',
             boxShadow: '0 0 10px rgba(255, 107, 107, 0.1)',
