@@ -1,4 +1,5 @@
 import React from 'react';
+import CoordinateSelector from './CoordinateSelector';
 
 function Controls({ 
   onPause, 
@@ -22,7 +23,9 @@ function Controls({
   onClear,
   theta1,
   theta2,
-  pendulumAngles
+  pendulumAngles,
+  position,
+  onPositionChange
 }) {
   // Helper function to format angle with fixed width
   const formatAngle = (radians) => {
@@ -116,52 +119,60 @@ function Controls({
       position: 'fixed',
       top: '20px',
       right: '20px',
+      padding: '20px',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      borderRadius: '10px',
       display: 'flex',
       flexDirection: 'column',
-      gap: '10px',
-      background: 'rgba(0, 0, 0, 0.7)',
-      padding: '20px',
-      borderRadius: '8px',
-      maxHeight: '95vh',
-      overflowY: 'auto'
+      gap: '20px'
     }}>
-      {/* First row of buttons */}
-      <div style={{ display: 'flex', gap: '10px' }}>
+      {/* Control Buttons - Horizontal layout */}
+      <div style={{ 
+        display: 'flex', 
+        gap: '8px', 
+        justifyContent: 'space-between',
+        width: '100%'  // Make container full width
+      }}>
         <button 
           style={{ 
-            width: '80px',
-            minWidth: '80px',
-            padding: '0.6em 0',  // Reduce horizontal padding
-            textAlign: 'center', // Ensure text is centered
-            overflow: 'hidden',  // Prevent text overflow
-            whiteSpace: 'nowrap' // Prevent text wrapping
-          }} 
+            padding: '0.6em 1.2em',  // Larger padding
+            backgroundColor: isPaused ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '0.9em',
+            flex: 1  // Make buttons take equal space
+          }}
           onClick={onPause}
         >
           {isPaused ? 'Resume' : 'Pause'}
         </button>
         <button 
           style={{ 
-            width: '80px',
-            minWidth: '80px',
-            padding: '0.6em 0',  // Reduce horizontal padding
-            textAlign: 'center', // Ensure text is centered
-            overflow: 'hidden',  // Prevent text overflow
-            whiteSpace: 'nowrap' // Prevent text wrapping
-          }} 
+            padding: '0.6em 1.2em',  // Larger padding
+            backgroundColor: 'transparent',
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '0.9em',
+            flex: 1  // Make buttons take equal space
+          }}
           onClick={onRestart}
         >
           Restart
         </button>
         <button 
-          style={{
-            width: '80px',
-            minWidth: '80px',
-            padding: '0.6em 0',  // Reduce horizontal padding
-            textAlign: 'center', // Ensure text is centered
-            overflow: 'hidden',  // Prevent text overflow
-            whiteSpace: 'nowrap', // Prevent text wrapping
-            backgroundColor: '#ff9800'
+          style={{ 
+            padding: '0.6em 1.2em',  // Larger padding
+            backgroundColor: 'transparent',
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '0.9em',
+            flex: 1  // Make buttons take equal space
           }}
           onClick={onClear}
         >
@@ -181,113 +192,115 @@ function Controls({
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ color: 'white' }}>Vertical Position</label>
-        <input 
-          type="range" 
-          min="0.1" 
-          max="0.8" 
-          step="0.1"
-          value={verticalPosition}
-          onChange={(e) => onVerticalPositionChange(parseFloat(e.target.value))}
-        />
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', borderTop: '1px solid #666', paddingTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#0000ff' }}>Blue Pendulum - Theta 1</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CircularSlider
-                value={pendulumAngles[0].t1 || 0}
-                onChange={(value) => onAngleChange('theta1', value, 0)}
-                color="#0000ff"
-              />
-              <div style={{ 
-                color: '#0000ff', 
-                minWidth: '160px',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: '2px 5px',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                textAlign: 'right'
-              }}>
-                {formatAngle(pendulumAngles[0].t1 || 0)}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#0000ff' }}>Blue Pendulum - Theta 2</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CircularSlider
-                value={pendulumAngles[0].t2 || 0}
-                onChange={(value) => onAngleChange('theta2', value, 0)}
-                color="#0000ff"
-              />
-              <div style={{ 
-                color: '#0000ff', 
-                minWidth: '160px',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: '2px 5px',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                textAlign: 'right'
-              }}>
-                {formatAngle(pendulumAngles[0].t2 || 0)}
-              </div>
-            </div>
-          </div>
+      {/* Coordinate Selector */}
+      <div style={{ width: '100%' }}>  {/* Full width container */}
+        <label style={{ color: 'white', display: 'block', marginBottom: '10px' }}>
+          Origin Position
+        </label>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>  {/* Center the selector */}
+          <CoordinateSelector
+            width={200}
+            height={150}
+            position={position}
+            onPositionChange={onPositionChange}
+            style={{ width: '100%' }}  // Make selector fill width
+          />
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', borderTop: '1px solid #666', paddingTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#ff0000' }}>Red Pendulum - Theta 1</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CircularSlider
-                value={pendulumAngles[1].t1 || 0}
-                onChange={(value) => onAngleChange('theta1', value, 1)}
-                color="#ff0000"
-              />
-              <div style={{ 
-                color: '#ff0000', 
-                minWidth: '160px',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: '2px 5px',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                textAlign: 'right'
-              }}>
-                {formatAngle(pendulumAngles[1].t1 || 0)}
-              </div>
+      {/* Theta 1 Controls - Side by side */}
+      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+        {/* Red Theta 1 */}
+        <div style={{ flex: 1 }}>
+          <label style={{ color: '#ff6b6b' }}>Theta 1</label>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <CircularSlider
+              value={pendulumAngles[1]?.t1 || 0}
+              onChange={(value) => onAngleChange('theta1', value, 1)}
+              color="#ff6b6b"
+            />
+            <div style={{ 
+              color: '#ff6b6b', 
+              width: '160px',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              padding: '2px 5px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              textAlign: 'center'
+            }}>
+              {formatAngle(pendulumAngles[1]?.t1 || 0)}
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#ff0000' }}>Red Pendulum - Theta 2</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CircularSlider
-                value={pendulumAngles[1].t2 || 0}
-                onChange={(value) => onAngleChange('theta2', value, 1)}
-                color="#ff0000"
-              />
-              <div style={{ 
-                color: '#ff0000', 
-                minWidth: '160px',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: '2px 5px',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                textAlign: 'right'
-              }}>
-                {formatAngle(pendulumAngles[1].t2 || 0)}
-              </div>
+        {/* Blue Theta 1 */}
+        <div style={{ flex: 1 }}>
+          <label style={{ color: '#4dabf7' }}>Theta 1</label>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <CircularSlider
+              value={pendulumAngles[0]?.t1 || 0}
+              onChange={(value) => onAngleChange('theta1', value, 0)}
+              color="#4dabf7"
+            />
+            <div style={{ 
+              color: '#4dabf7', 
+              width: '160px',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              padding: '2px 5px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              textAlign: 'center'
+            }}>
+              {formatAngle(pendulumAngles[0]?.t1 || 0)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Theta 2 Controls - Side by side */}
+      <div style={{ display: 'flex', gap: '20px' }}>
+        {/* Red Theta 2 */}
+        <div style={{ flex: 1 }}>
+          <label style={{ color: '#ff6b6b' }}>Theta 2</label>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <CircularSlider
+              value={pendulumAngles[1]?.t2 || 0}
+              onChange={(value) => onAngleChange('theta2', value, 1)}
+              color="#ff6b6b"
+            />
+            <div style={{ 
+              color: '#ff6b6b', 
+              width: '160px',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              padding: '2px 5px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              textAlign: 'center'
+            }}>
+              {formatAngle(pendulumAngles[1]?.t2 || 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* Blue Theta 2 */}
+        <div style={{ flex: 1 }}>
+          <label style={{ color: '#4dabf7' }}>Theta 2</label>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <CircularSlider
+              value={pendulumAngles[0]?.t2 || 0}
+              onChange={(value) => onAngleChange('theta2', value, 0)}
+              color="#4dabf7"
+            />
+            <div style={{ 
+              color: '#4dabf7', 
+              width: '160px',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              padding: '2px 5px',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              textAlign: 'center'
+            }}>
+              {formatAngle(pendulumAngles[0]?.t2 || 0)}
             </div>
           </div>
         </div>
@@ -315,6 +328,22 @@ function Controls({
         >
           Gravity
         </button>
+        <button 
+        onClick={onToggleDirectionalGravity}
+        style={{
+          backgroundColor: hasDirectionalGravity ? '#4CAF50' : '#f44336',
+          opacity: isVacuum ? 0.5 : 1,
+          cursor: isVacuum ? 'not-allowed' : 'pointer',
+          minWidth: '120px',
+          padding: '0.6em 0',
+          textAlign: 'center',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap'
+        }}
+        disabled={isVacuum}
+      >
+        {hasDirectionalGravity ? 'Freefall' : 'Freefall'}
+      </button>
       </div>
 
       {/* Gravity strength slider */}
@@ -335,23 +364,6 @@ function Controls({
           style={{ opacity: isVacuum ? 0.5 : 1 }}
         />
       </div>
-
-      <button 
-        onClick={onToggleDirectionalGravity}
-        style={{
-          backgroundColor: hasDirectionalGravity ? '#4CAF50' : '#f44336',
-          opacity: isVacuum ? 0.5 : 1,
-          cursor: isVacuum ? 'not-allowed' : 'pointer',
-          minWidth: '120px',
-          padding: '0.6em 0',
-          textAlign: 'center',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap'
-        }}
-        disabled={isVacuum}
-      >
-        {hasDirectionalGravity ? 'Freefall' : 'Freefall'}
-      </button>
 
       {/* Bottom row of buttons */}
       <div style={{ 

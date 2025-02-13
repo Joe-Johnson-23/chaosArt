@@ -51,7 +51,7 @@ class Pendulum {
         };
     }
 
-    update(dt, length, prefactor_t, prefactor_p, constant, verticalPosition) {
+    update(dt, length, prefactor_t, prefactor_p, constant, verticalPosition, horizontalPosition) {
         let t1dot = this.t1_dot(this.t1, this.t2, this.p1, this.p2, prefactor_t);
         let t2dot = this.t2_dot(this.t1, this.t2, this.p1, this.p2, prefactor_t);
         let p1dot = this.p1_dot(this.t1, this.t2, t1dot, t2dot, prefactor_p, constant);
@@ -63,8 +63,10 @@ class Pendulum {
         this.p2 += dt * p2dot;
 
         const startY = window.innerHeight * verticalPosition;
+        const startX = window.innerWidth * horizontalPosition;  // Add horizontal start position
+
         this.trails.push({
-            x: window.innerWidth / 2 + length * Math.sin(this.t1) + length * Math.sin(this.t2),
+            x: startX + length * Math.sin(this.t1) + length * Math.sin(this.t2),  // Use startX instead of window.innerWidth/2
             y: startY + length * Math.cos(this.t1) + length * Math.cos(this.t2),
             xOffset: 0,
             yOffset: 0,
@@ -165,13 +167,14 @@ class Pendulum {
             return keep;
         });
 
-        // Draw pendulum arms (unchanged)
+        // Draw pendulum arms with both horizontal and vertical position
         const startY = window.innerHeight * verticalPosition;
+        const startX = window.innerWidth * horizontalPosition;  // Use horizontal position
         context.strokeStyle = this.color;
         context.lineWidth = 3;
         context.beginPath();
-        context.moveTo(window.innerWidth / 2, startY);
-        let x1 = window.innerWidth / 2 + length * Math.sin(this.t1);
+        context.moveTo(startX, startY);  // Start from the correct horizontal position
+        let x1 = startX + length * Math.sin(this.t1);  // Calculate x1 from startX
         let y1 = startY + length * Math.cos(this.t1);
         let x2 = x1 + length * Math.sin(this.t2);
         let y2 = y1 + length * Math.cos(this.t2);
@@ -203,7 +206,7 @@ const PENDULUM_COLORS = [
 function InfiniteSpiral() {
     const canvasRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
-    const [verticalPosition, setVerticalPosition] = useState(0.2);
+    const [position, setPosition] = useState({ x: 0.5, y: 0.5 });
     const [hasTrailEffect, setHasTrailEffect] = useState(false);
     const [hasDirectionalGravity, setHasDirectionalGravity] = useState(false);
     const [pendulumLength, setPendulumLength] = useState(0.1);
@@ -246,12 +249,10 @@ function InfiniteSpiral() {
                 setIsTopLeft(prev => !prev);
                 // When toggling to top-left, set positions to 0
                 if (!isTopLeft) {
-                    setVerticalPosition(0);
-                    setHorizontalPosition(0);
+                    setPosition({ x: 0, y: 0 });
                 } else {
                     // When toggling back, reset to center
-                    setVerticalPosition(0.5);
-                    setHorizontalPosition(0.5);
+                    setPosition({ x: 0.5, y: 0.5 });
                 }
             }
         };
@@ -286,7 +287,8 @@ function InfiniteSpiral() {
             if (!isPaused) {
                 pendulumsRef.current.forEach(pendulum => {
                     pendulum.update(dt, length, prefactor_t, prefactor_p, constant, 
-                        isTopLeft ? 0 : verticalPosition
+                        position.y,
+                        position.x
                     );
                 });
             }
@@ -297,17 +299,16 @@ function InfiniteSpiral() {
                     length, 
                     hidePendulumArms ? 0 : radius,
                     gravityStrength,
-                    isTopLeft ? 0 : verticalPosition,
+                    position.y,
                     hasTrailEffect,
                     hasDirectionalGravity,
                     isVacuum,
-                    isTopLeft ? 0 : horizontalPosition,
+                    position.x,
                     hidePendulumArms
                 );
             });
 
-            // Add console.log to debug pendulum values
-            console.log('Pendulum angles:', pendulumsRef.current.map(p => ({t1: p.t1, t2: p.t2})));
+        
 
             // Update angle state to match current pendulum positions
             setPendulumAngles(pendulumsRef.current.map(pendulum => ({
@@ -323,10 +324,11 @@ function InfiniteSpiral() {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [isPaused, verticalPosition, horizontalPosition, hasTrailEffect, 
+    }, [isPaused, position.y, hasTrailEffect, 
         hasDirectionalGravity, pendulumLength, isVacuum, gravityStrength, 
         hidePendulumArms, isTopLeft]);
 
+  
     // Control Handlers
     
     // Pause/Resume: Toggles the physics simulation
@@ -380,9 +382,8 @@ function InfiniteSpiral() {
         }
     };
 
-    // Add vertical position handler
-    const handleVerticalPositionChange = (newPosition) => {
-        setVerticalPosition(newPosition);
+    const handlePositionChange = (newPosition) => {
+        setPosition(newPosition);
     };
 
     const handleToggleTrailEffect = () => {
@@ -436,11 +437,11 @@ function InfiniteSpiral() {
                 onAngleChange={handleAngleChange}
                 onAddPendulum={handleAddPendulum}
                 onDeletePendulum={handleDeletePendulum}
-                onVerticalPositionChange={handleVerticalPositionChange}
+                onPositionChange={handlePositionChange}
                 onToggleTrailEffect={handleToggleTrailEffect}
                 onToggleDirectionalGravity={handleToggleDirectionalGravity}
                 isPaused={isPaused}
-                verticalPosition={verticalPosition}
+                position={position}
                 hasTrailEffect={hasTrailEffect}
                 hasDirectionalGravity={hasDirectionalGravity}
                 onLengthChange={handleLengthChange}
@@ -457,5 +458,4 @@ function InfiniteSpiral() {
         </>
     );
 }
-
 export default InfiniteSpiral; 
