@@ -117,63 +117,103 @@ function Controls({
   return (
     <div style={{
       position: 'fixed',
-      top: '20px',
       right: '20px',
-      padding: '20px',
+      top: '20px',
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      borderRadius: '10px',
+      padding: '20px',
+      borderRadius: '12px',
+      maxHeight: '90vh',  // Maximum height of 90% viewport height
+      overflowY: 'auto',  // Enable vertical scrolling
+      overflowX: 'hidden', // Prevent horizontal scrolling
+      minWidth: '300px',   // Minimum width before scrolling
+      maxWidth: '400px',   // Maximum width
       display: 'flex',
       flexDirection: 'column',
-      gap: '20px'
+      gap: '20px',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      // Custom scrollbar styling
+      '&::-webkit-scrollbar': {
+        width: '8px'
+      },
+      '&::-webkit-scrollbar-track': {
+        background: 'rgba(255, 255, 255, 0.1)',
+        borderRadius: '4px'
+      },
+      '&::-webkit-scrollbar-thumb': {
+        background: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: '4px',
+        '&:hover': {
+          background: 'rgba(255, 255, 255, 0.3)'
+        }
+      }
     }}>
       {/* Control Buttons - Horizontal layout */}
       <div style={{ 
         display: 'flex', 
         gap: '8px', 
         justifyContent: 'space-between',
-        width: '100%'  // Make container full width
+        width: '100%'
       }}>
         <button 
           style={{ 
-            padding: '0.6em 1.2em',  // Larger padding
-            backgroundColor: isPaused ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-            color: 'white',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '4px',
+            padding: '8px 16px',
+            backgroundColor: '#4dabf7',  // Changed to blue color
+            color: 'white',              // White text
+            border: '1px solid #4dabf7',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '0.9em',
-            flex: 1  // Make buttons take equal space
+            fontSize: '14px',
+            flex: 1,
+            transition: 'all 0.3s ease',
+            boxShadow: '0 0 10px rgba(77, 171, 247, 0.1)',  // Blue glow
+            minWidth: '100px',
+            fontWeight: 'normal'
           }}
+          onMouseEnter={e => e.target.style.boxShadow = '0 0 20px rgba(77, 171, 247, 0.2)'}
+          onMouseLeave={e => e.target.style.boxShadow = '0 0 10px rgba(77, 171, 247, 0.1)'}
           onClick={onPause}
         >
           {isPaused ? 'Resume' : 'Pause'}
         </button>
         <button 
           style={{ 
-            padding: '0.6em 1.2em',  // Larger padding
-            backgroundColor: 'transparent',
-            color: 'white',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '4px',
+            padding: '8px 16px',
+            backgroundColor: '#4dabf7',  // Changed to blue color
+            color: 'white',              // White text
+            border: '1px solid #4dabf7',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '0.9em',
-            flex: 1  // Make buttons take equal space
+            fontSize: '14px',
+            flex: 1,
+            transition: 'all 0.3s ease',
+            boxShadow: '0 0 10px rgba(77, 171, 247, 0.1)',  // Blue glow
+            minWidth: '100px',
+            fontWeight: 'normal'
           }}
+          onMouseEnter={e => e.target.style.boxShadow = '0 0 20px rgba(77, 171, 247, 0.2)'}
+          onMouseLeave={e => e.target.style.boxShadow = '0 0 10px rgba(77, 171, 247, 0.1)'}
           onClick={onRestart}
         >
           Restart
         </button>
         <button 
           style={{ 
-            padding: '0.6em 1.2em',  // Larger padding
-            backgroundColor: 'transparent',
+            padding: '8px 16px',
+            backgroundColor: '#ff6b6b',  // Kept orange for Clear
             color: 'white',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '4px',
+            border: '1px solid #ff6b6b',
+            borderRadius: '8px',
             cursor: 'pointer',
-            fontSize: '0.9em',
-            flex: 1  // Make buttons take equal space
+            fontSize: '14px',
+            flex: 1,
+            transition: 'all 0.3s ease',
+            boxShadow: '0 0 10px rgba(255, 107, 107, 0.1)',
+            minWidth: '100px',
+            fontWeight: 'normal'
           }}
+          onMouseEnter={e => e.target.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.2)'}
+          onMouseLeave={e => e.target.style.boxShadow = '0 0 10px rgba(255, 107, 107, 0.1)'}
           onClick={onClear}
         >
           Clear
@@ -374,13 +414,13 @@ function Controls({
         paddingTop: '10px'
       }}>
         <button 
-          style={{ flex: 1, minWidth: '80px', padding: '0.6em 0', textAlign: 'center' }}
+          style={{ flex: 1, minWidth: '80px', padding: '0.6em 0', textAlign: 'center', backgroundColor: '#4CAF50' }}
           onClick={onAddPendulum}
         >
           Add
         </button>
         <button 
-          style={{ flex: 1, minWidth: '80px', padding: '0.6em 0', textAlign: 'center' }}
+          style={{ flex: 1, minWidth: '80px', padding: '0.6em 0', textAlign: 'center', backgroundColor:'#f44336' }}
           onClick={onDeletePendulum}
         >
           Delete
@@ -391,7 +431,7 @@ function Controls({
             minWidth: '80px',
             padding: '0.6em 0',
             textAlign: 'center',
-            backgroundColor: hasTrailEffect ? '#4CAF50' : '#f44336'
+            backgroundColor: hasTrailEffect ? '#4CAF50' : 'gray'
           }}
           onClick={onToggleTrailEffect}
         >

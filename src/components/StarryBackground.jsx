@@ -9,7 +9,7 @@ function StarryBackground() {
     // Configuration could be moved to a separate file
     const CONFIG = {
         stars: {
-            count: 100,
+            count: 67,
             speedRange: { min: -0.5, max: 0.5 },
             sizeRange: { min: 1, max: 3 },
             colors: {
@@ -26,10 +26,10 @@ function StarryBackground() {
             }
         },
         glow: {
-            baseSize: 5,
+            baseSize: 3,
             hoverSize: 24,
             maxSize: 40,
-            growthRate: 0.8,
+            growthRate: 0.1,
             shrinkRate: 0.1
         },
         mouse: {
