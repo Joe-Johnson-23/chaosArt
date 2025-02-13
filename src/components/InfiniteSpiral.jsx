@@ -77,17 +77,21 @@ class Pendulum {
         this.cycle = (this.cycle + 1) % 360;
     }
 
-    render(context, length, radius, gravityStrength, verticalPosition, hasTrailEffect, hasDirectionalGravity, isVacuum, horizontalPosition, hidePendulumArms) {
+    render(context, length, radius, gravityStrength, verticalPosition, hasTrailEffect, hasDirectionalGravity, isVacuum, horizontalPosition, hidePendulumArms, isGravityReversed) {
         // Update trail positions with directional gravity
         this.trails.forEach((point, index) => {
-            if (!isVacuum) {  // Only update positions if not in vacuum
+            if (!isVacuum) {
                 if (hasDirectionalGravity) {
                     const vector = this.getQuadrantVector(point.x, point.y);
-                    point.xOffset = (point.xOffset || 0) + vector.x * gravityStrength;
-                    point.yOffset = (point.yOffset || 0) + vector.y * gravityStrength;
+                    // Reverse the vector if gravity is reversed
+                    const gravityMultiplier = isGravityReversed ? -1 : 1;
+                    point.xOffset = (point.xOffset || 0) + vector.x * gravityStrength * gravityMultiplier;
+                    point.yOffset = (point.yOffset || 0) + vector.y * gravityStrength * gravityMultiplier;
                 } else {
                     point.xOffset = point.xOffset || 0;
-                    point.yOffset = (point.yOffset || 0) + gravityStrength;
+                    // Reverse vertical gravity if reversed
+                    const gravityMultiplier = isGravityReversed ? -1 : 1;
+                    point.yOffset = (point.yOffset || 0) + gravityStrength * gravityMultiplier;
                 }
             }
             
@@ -219,6 +223,7 @@ function InfiniteSpiral() {
     const [hidePendulumArms, setHidePendulumArms] = useState(false);
     const [horizontalPosition, setHorizontalPosition] = useState(0.5);
     const [isTopLeft, setIsTopLeft] = useState(false);
+    const [isGravityReversed, setIsGravityReversed] = useState(false);
     
     const pendulumsRef = useRef([
         new Pendulum(Math.PI/3, Math.PI/3, "#0000ff"),
@@ -254,6 +259,9 @@ function InfiniteSpiral() {
                     // When toggling back, reset to center
                     setPosition({ x: 0.5, y: 0.5 });
                 }
+            }
+            if (event.key.toLowerCase() === 'k') {
+                setIsGravityReversed(prev => !prev);
             }
         };
 
@@ -304,7 +312,8 @@ function InfiniteSpiral() {
                     hasDirectionalGravity,
                     isVacuum,
                     position.x,
-                    hidePendulumArms
+                    hidePendulumArms,
+                    isGravityReversed
                 );
             });
 
@@ -326,7 +335,7 @@ function InfiniteSpiral() {
         };
     }, [isPaused, position.y, hasTrailEffect, 
         hasDirectionalGravity, pendulumLength, isVacuum, gravityStrength, 
-        hidePendulumArms, isTopLeft]);
+        hidePendulumArms, isTopLeft, isGravityReversed]);
 
   
     // Control Handlers
