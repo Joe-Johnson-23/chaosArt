@@ -4,6 +4,7 @@ export function FPSTracker() {
     const [fps, setFps] = useState(0);
     const [maxFps, setMaxFps] = useState(0);
     const [minFps, setMinFps] = useState(Infinity);
+    const [stability, setStability] = useState(100); // Percentage of frame stability
     const frameTimesRef = useRef([]);
     const lastFrameTimeRef = useRef(performance.now());
 
@@ -19,7 +20,7 @@ export function FPSTracker() {
             setMaxFps(prev => Math.max(prev, instantFps));
             setMinFps(prev => Math.min(prev, instantFps));
             
-            // Calculate rolling average
+            // Calculate rolling average and stability
             frameTimesRef.current.push(frameTime);
             if (frameTimesRef.current.length > 60) {
                 frameTimesRef.current.shift();
@@ -27,7 +28,14 @@ export function FPSTracker() {
             
             const averageFrameTime = frameTimesRef.current.reduce((a, b) => a + b, 0) / frameTimesRef.current.length;
             const currentFps = Math.round(1000 / averageFrameTime);
+            
+            // Calculate stability (variance from target 60 FPS)
+            const variance = frameTimesRef.current.reduce((sum, time) => 
+                sum + Math.abs(time - (1000/60)), 0) / frameTimesRef.current.length;
+            const stabilityScore = Math.max(0, Math.min(100, 100 - (variance / 2)));
+            
             setFps(currentFps);
+            setStability(Math.round(stabilityScore));
 
             requestAnimationFrame(updateFPS);
         }
@@ -57,6 +65,7 @@ export function FPSTracker() {
             <div>Current FPS: {fps}</div>
             <div>Max FPS: {maxFps}</div>
             <div>Min FPS: {minFps}</div>
+            <div>Stability: {stability}%</div>
         </div>
     );
 } 
