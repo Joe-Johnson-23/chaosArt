@@ -31,11 +31,15 @@ export function FPSTracker() {
             position: 'fixed',
             left: '20px',
             bottom: '20px',
-            color: 'white',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            padding: '10px',
-            borderRadius: '5px',
-            zIndex: 1000
+            color: '#4dabf7',  // Bright blue color
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',  // More opaque background
+            padding: '12px 20px',  // Larger padding
+            borderRadius: '8px',
+            zIndex: 9999,  // Very high z-index to ensure visibility
+            fontSize: '18px',  // Larger text
+            fontWeight: 'bold',
+            boxShadow: '0 0 10px rgba(77, 171, 247, 0.3)',  // Glowing effect
+            border: '1px solid rgba(77, 171, 247, 0.2)'  // Subtle border
         }}>
             FPS: {fps}
         </div>
