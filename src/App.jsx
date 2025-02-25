@@ -5,7 +5,6 @@ import './App.css'
 import InfiniteSpiral from './components/InfiniteSpiral'
 import StarryBackground from './components/StarryBackground'
 import { InfiniteScroll } from './components/InfiniteScroll'
-import { FPSTracker } from './components/FPSTracker'
 
 function App() {
   const navigate = useNavigate()
@@ -13,7 +12,6 @@ function App() {
   return (
     <div>
       <StarryBackground />
-      <FPSTracker />
       <Routes>
         <Route path="/" element={
           <div className="app-container">

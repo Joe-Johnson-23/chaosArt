@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Controls from './Controls';
-import { FPSTracker } from './FPSTracker';
 
 // Move Pendulum class outside the component
 class Pendulum {
@@ -465,7 +464,6 @@ function InfiniteSpiral() {
                 horizontalPosition={horizontalPosition}
                 onHorizontalPositionChange={handleHorizontalPositionChange}
             />
-            <FPSTracker />
         </>
     );
 }
