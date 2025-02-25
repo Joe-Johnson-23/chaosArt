@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Link } from 'react-router-dom'
 import logo from './assets/logo.png'
 import './App.css'
 import InfiniteSpiral from './components/InfiniteSpiral'
 import StarryBackground from './components/StarryBackground'
+import { InfiniteScroll } from './components/InfiniteScroll'
+import { FPSTracker } from './components/FPSTracker'
 
 function App() {
   const navigate = useNavigate()
@@ -11,6 +13,7 @@ function App() {
   return (
     <div>
       <StarryBackground />
+      <FPSTracker />
       <Routes>
         <Route path="/" element={
           <div className="app-container">
@@ -28,10 +31,21 @@ function App() {
               >
                 Infinite Spiral
               </button>
+
+              <button 
+                className="circle-button"
+                onClick={() => navigate('/infinite-scroll')}
+              >
+                Infinite Scroll
+              </button>
+
+
+             
             </div>
           </div>
         } />
         <Route path="/infinite-spiral" element={<InfiniteSpiral />} />
+        <Route path="/infinite-scroll" element={<InfiniteScroll />} />
       </Routes>
     </div>
   )

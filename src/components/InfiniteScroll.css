@@ -1,0 +1,15 @@
+.infinite-scroll-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.infinite-scroll-container h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+} 
