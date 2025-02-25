@@ -48,7 +48,7 @@ function StarryBackground() {
             colorCycleSpeed: 0.1
         },
         performance: {
-            targetFPS: 144,  // Adjust this to control frame rate
+            targetFPS: 60,  // Adjust this to control frame rate
             useFrameSkipping: true
         },
         explosion: {
