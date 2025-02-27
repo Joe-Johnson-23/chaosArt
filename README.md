@@ -1,6 +1,9 @@
 # Chaos Art
 
-An interactive visualization of double pendulum physics, creating mesmerizing patterns through mathematical chaos.
+A double pendulum visualization project.
+
+## Live Demo
+Visit the live application: [Chaos Art](https://the-works-of-joe-johnson-2c33aa058b4b.herokuapp.com)
 
 ## Overview
 
