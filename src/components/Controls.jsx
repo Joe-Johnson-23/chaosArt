@@ -1,7 +1,6 @@
 import React from 'react';
 import CoordinateSelector from './CoordinateSelector';
 
-
 function Controls({ 
   onPause, 
   onRestart, 
@@ -114,6 +113,41 @@ function Controls({
       </svg>
     );
   };
+
+  // FUTURE BACKEND IMPLEMENTATION REFERENCE
+  /*
+    Backend Integration Example:
+    
+    1. Import API service
+    import { apiService } from '../services/api';
+
+    2. Save Configuration Handler
+    const handleSaveConfig = async () => {
+      try {
+        // Collect current state
+        const config = {
+          pendulumLength: currentLength,
+          gravityStrength,
+          hasTrailEffect
+        };
+        
+        // Send to backend
+        const response = await apiService.configurations.save(config);
+        
+        // Handle response
+        if (response.success) {
+          console.log('Configuration saved!');
+        }
+      } catch (error) {
+        console.error('Failed to save:', error);
+      }
+    };
+
+    3. Add Save Button to UI
+    <button onClick={handleSaveConfig}>
+      Save Configuration
+    </button>
+  */
 
   return (
     <div style={{
@@ -439,7 +473,6 @@ function Controls({
           Prism
         </button>
       </div>
-
     </div>
   );
 }
