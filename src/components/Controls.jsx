@@ -1,6 +1,6 @@
 import React from 'react';
 import CoordinateSelector from './CoordinateSelector';
-import { apiService } from '../services/api';
+
 
 function Controls({ 
   onPause, 
@@ -113,23 +113,6 @@ function Controls({
         />
       </svg>
     );
-  };
-
-  const handleSaveConfig = async () => {
-    try {
-      const config = {
-        pendulumLength: currentLength,
-        gravityStrength,
-        hasTrailEffect
-      };
-      
-      console.log('Sending config:', config);
-      const response = await apiService.configurations.save(config);
-      console.log('Server response:', response);
-      
-    } catch (error) {
-      console.error('Failed to save:', error);
-    }
   };
 
   return (
@@ -457,12 +440,6 @@ function Controls({
         </button>
       </div>
 
-      <button 
-        onClick={handleSaveConfig}
-        className="control-button"
-      >
-        Save Configuration
-      </button>
     </div>
   );
 }
