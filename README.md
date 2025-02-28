@@ -5,10 +5,10 @@ A double pendulum visualization project.
 ## Live Demo
 Visit the live application: [Chaos Art](https://the-works-of-joe-johnson-2c33aa058b4b.herokuapp.com)
 
-## Hidden Keyboard Controls
-- `H` - Toggle help menu
-- `J` - Toggle coordinate selector
-- `K` - Toggle control panel
+## Hidden Keyboard Controls for Infinite Spiral
+- `H` - Hides the pendulum's intermediate and terminal points
+- `J` - Sends the pivot point of the pendulum to the top left corner
+- `K` - Reverses the direction of the pendulum's trails
 
 These keyboard shortcuts allow you to show/hide different UI elements of the application.
 
