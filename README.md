@@ -5,6 +5,13 @@ A double pendulum visualization project.
 ## Live Demo
 Visit the live application: [Chaos Art](https://the-works-of-joe-johnson-2c33aa058b4b.herokuapp.com)
 
+## Hidden Keyboard Controls
+- `H` - Toggle help menu
+- `J` - Toggle coordinate selector
+- `K` - Toggle control panel
+
+These keyboard shortcuts allow you to show/hide different UI elements of the application.
+
 ## Overview
 
 This project explores the fascinating world of chaos theory through the lens of double pendulum motion. By visualizing the paths traced by multiple pendulums, it creates unique, never-repeating patterns that demonstrate the beauty of mathematical chaos.

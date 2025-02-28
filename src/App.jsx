@@ -30,12 +30,7 @@ function App() {
                 Infinite Spiral
               </button>
 
-              <button 
-                className="circle-button"
-                onClick={() => navigate('/infinite-scroll')}
-              >
-                Infinite Scroll
-              </button>
+            
 
 
              
