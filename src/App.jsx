@@ -1,7 +1,8 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import InfiniteSpiral from './components/InfiniteSpiral';
-// import CoinShop from './components/CoinShop'; // Uncomment if you have this component
+
+import StarryBackground from './components/StarryBackground';
 
 function Home() {
   return (
@@ -16,9 +17,13 @@ function Home() {
     }}>
       <h1>Welcome to Chaos Art</h1>
       <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
-        <Link to="/coin-shop">
+        <a
+          href="https://dollarsandcents.io"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <button style={{ fontSize: '1.5rem', padding: '1rem 2rem' }}>Coin Shop</button>
-        </Link>
+        </a>
         <Link to="/infinite-spiral">
           <button style={{ fontSize: '1.5rem', padding: '1rem 2rem' }}>Infinite Spirals</button>
         </Link>
@@ -29,11 +34,14 @@ function Home() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      {/* <Route path="/coin-shop" element={<CoinShop />} /> */}
-      <Route path="/infinite-spiral" element={<InfiniteSpiral />} />
-    </Routes>
+    <>
+      <StarryBackground />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/coin-shop" element={<CoinShop />} />
+        <Route path="/infinite-spiral" element={<InfiniteSpiral />} />
+      </Routes>
+    </>
   );
 }
 
