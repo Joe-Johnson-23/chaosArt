@@ -38,7 +38,7 @@ function App() {
       <StarryBackground />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/coin-shop" element={<CoinShop />} />
+      
         <Route path="/infinite-spiral" element={<InfiniteSpiral />} />
       </Routes>
     </>
