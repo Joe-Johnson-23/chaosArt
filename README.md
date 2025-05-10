@@ -3,7 +3,7 @@
 A double pendulum visualization project.
 
 ## Live Demo
-Visit the live application: [Chaos Art](https://the-works-of-joe-johnson-2c33aa058b4b.herokuapp.com)
+Visit the live application: [Chaos Art](https://joe-johnson-23.github.io/chaosArt/)
 
 ## Hidden Keyboard Controls for Infinite Spiral
 - `H` - Hides the pendulum's intermediate and terminal points
