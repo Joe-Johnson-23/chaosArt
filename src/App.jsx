@@ -5,13 +5,14 @@ import StarryBackground from './components/StarryBackground';
 
 function Home() {
   return (
-    <div style={{
+    <div className="app-container" style={{
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      background: '#1a1a1a',
+      // Remove or comment out the background color if you want the stars to show through
+      // background: '#1a1a1a',
       color: 'white'
     }}>
       <h1>Welcome to Chaos Art</h1>
