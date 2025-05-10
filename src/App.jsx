@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import InfiniteSpiral from './components/InfiniteSpiral';
-
 import StarryBackground from './components/StarryBackground';
 
 function Home() {
